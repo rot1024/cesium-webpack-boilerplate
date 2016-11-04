@@ -78,8 +78,14 @@ module.exports = dist => ({
       template: "src/index.html"
     }),
     new CopyWebpackPlugin([
-      { from: `node_modules/cesium/Build/Cesium${dist ? "" : "Unminified"}` },
-      { from: "static", to: "static" }
+      {
+        from: `node_modules/cesium/Build/Cesium${dist ? "" : "Unminified"}`,
+        ignore: "Cesium.js"
+      },
+      {
+        from: "static",
+        to: "static"
+      }
     ])
   ],
   resolve: {
