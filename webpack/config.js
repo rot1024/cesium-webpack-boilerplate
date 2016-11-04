@@ -69,10 +69,7 @@ module.exports = dist => ({
       title: "Cesium"
     }),
     new CopyWebpackPlugin([
-      {
-        from: "assets",
-        to: "assets"
-      },
+      { from: "static" },
       {
         from: `node_modules/cesium/Build/Cesium${dist ? "" : "Unminified"}`,
         to: "cesium"
