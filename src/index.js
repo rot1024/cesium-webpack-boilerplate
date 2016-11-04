@@ -1,3 +1,4 @@
+import "./style.css";
 import { Viewer } from "cesium";
 
 const viewer = new Viewer("cesium");

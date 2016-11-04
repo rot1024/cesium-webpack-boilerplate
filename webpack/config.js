@@ -4,6 +4,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const postcssImport = require("postcss-import");
 const postcssUrl = require("postcss-url");
 const postcssCssnext = require("postcss-cssnext");
@@ -12,6 +13,11 @@ const postcssReporter = require("postcss-reporter");
 const cssnano = require("cssnano");
 
 const devServerPort = 3000;
+const extractCSS = new ExtractTextWebpackPlugin("style.css");
+const cssLoader = [
+  "css?sourceMap&modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]",
+  "postcss"
+].join("!");
 
 module.exports = dist => ({
   devServerPort,
@@ -22,8 +28,7 @@ module.exports = dist => ({
       `webpack-dev-server/client?http://0.0.0.0:${devServerPort}`,
       "webpack/hot/dev-server"
     ]),
-    "./src/index.js",
-    "./src/styles/index.css"
+    "./src/index.js"
   ],
   externals: {
     cesium: "Cesium"
@@ -36,7 +41,7 @@ module.exports = dist => ({
       include: path.resolve(__dirname, "..")
     }, {
       test: /\.css$/,
-      loader: `style-loader!css-loader${!dist ? "?sourceMap" : ""}!postcss-loader`
+      loader: dist ? extractCSS.extract("style", cssLoader) : `style!${cssLoader}`
     }]
   },
   output: {
@@ -52,7 +57,8 @@ module.exports = dist => ({
       }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.UglifyJsPlugin()
+      new webpack.optimize.UglifyJsPlugin(),
+      extractCSS
     ] : [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin()
