@@ -14,7 +14,7 @@ const cssReporter = require("postcss-reporter");
 const devServerPort = 3000;
 const extractCSS = new ExtractTextWebpackPlugin("style.css");
 const cssLoader = [
-  "css?sourceMap&modules&importLoaders=1&localIdentName=[local]_[hash:base64:5]",
+  "css?sourceMap&importLoaders=1",
   "postcss"
 ].join("!");
 
