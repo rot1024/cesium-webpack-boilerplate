@@ -29,25 +29,36 @@ module.exports = dist => ({
     ]),
     "./src/index.js"
   ],
-  externals: {
-    cesium: "Cesium"
-  },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      loader: "babel",
-      exclude: /node_modules/,
-      include: path.resolve(__dirname, "..")
-    }, {
-      test: /\.css$/,
-      loader: dist ? extractCSS.extract("style", cssLoader) : `style!${cssLoader}`,
-      exclude: /node_modules/
-    }]
+    unknownContextCritical: false,
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: "babel",
+        exclude: /node_modules/,
+        include: path.resolve(__dirname, "..")
+      },
+      {
+        test: /\.css$/,
+        loader: dist ? extractCSS.extract("style", cssLoader) : `style!${cssLoader}`,
+        exclude: /node_modules/
+      },
+      {
+        test: /\.css$/,
+        loader: dist ? extractCSS.extract("style", "css") : "style!css",
+        include: /node_modules/
+      },
+      {
+        test: /\.(png|gif|jpg|jpeg)$/,
+        loader: "file"
+      }
+    ]
   },
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "..", dist ? "dist" : "dev"),
-    pathinfo: !dist
+    pathinfo: !dist,
+    sourcePrefix: ""
   },
   plugins: [
     ...(dist ? [
@@ -64,22 +75,14 @@ module.exports = dist => ({
       new webpack.NoErrorsPlugin()
     ]),
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      template: "src/index.ejs",
-      title: "Cesium"
+      template: "src/index.html"
     }),
     new CopyWebpackPlugin([
-      { from: "static" },
-      {
-        from: `node_modules/cesium/Build/Cesium${dist ? "" : "Unminified"}`,
-        to: "cesium"
-      }
+      { from: `node_modules/cesium/Build/Cesium${dist ? "" : "Unminified"}` },
+      { from: "static", to: "static" }
     ])
   ],
   resolve: {
-    alias: {
-      config: path.resolve(__dirname, "..", "config")
-    },
     extenstions: ["", ".js"]
   },
   postcss(wp) {
