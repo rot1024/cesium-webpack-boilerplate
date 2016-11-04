@@ -1,7 +1,6 @@
 "use strict";
 
 const path = require("path");
-/* eslint-disable node/no-unpublished-require */
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -11,12 +10,11 @@ const postcssCssnext = require("postcss-cssnext");
 const postcssBrowserReporter = require("postcss-browser-reporter");
 const postcssReporter = require("postcss-reporter");
 const cssnano = require("cssnano");
-/* eslint-enable node/no-unpublished-require */
 
 const devServerPort = 3000;
 
 module.exports = dist => ({
-  _devServerPort: devServerPort,
+  devServerPort,
   debug: !dist,
   devtool: dist ? void 0 : "source-map",
   entry: [
