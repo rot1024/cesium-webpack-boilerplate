@@ -5,12 +5,11 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
-const postcssImport = require("postcss-import");
-const postcssUrl = require("postcss-url");
-const postcssCssnext = require("postcss-cssnext");
-const postcssBrowserReporter = require("postcss-browser-reporter");
-const postcssReporter = require("postcss-reporter");
-const cssnano = require("cssnano");
+const cssImport = require("postcss-smart-import");
+const cssUrl = require("postcss-url");
+const cssnext = require("postcss-cssnext");
+const cssBrowserReporter = require("postcss-browser-reporter");
+const cssReporter = require("postcss-reporter");
 
 const devServerPort = 3000;
 const extractCSS = new ExtractTextWebpackPlugin("style.css");
@@ -41,7 +40,8 @@ module.exports = dist => ({
       include: path.resolve(__dirname, "..")
     }, {
       test: /\.css$/,
-      loader: dist ? extractCSS.extract("style", cssLoader) : `style!${cssLoader}`
+      loader: dist ? extractCSS.extract("style", cssLoader) : `style!${cssLoader}`,
+      exclude: /node_modules/
     }]
   },
   output: {
@@ -85,16 +85,16 @@ module.exports = dist => ({
     },
     extenstions: ["", ".js"]
   },
-  postcss() {
+  postcss(wp) {
     return [
-      postcssImport({ addDependencyTo: webpack }),
-      postcssUrl(),
-      postcssCssnext({
-        warnForDuplicates: false
+      cssImport({
+        path: ["node_modules", "./src"],
+        addDependencyTo: wp
       }),
-      cssnano(),
-      postcssBrowserReporter(),
-      postcssReporter()
+      cssUrl(),
+      cssnext({ browsers: ["> 5% in JP"] }),
+      cssBrowserReporter(),
+      cssReporter()
     ];
   }
 });
