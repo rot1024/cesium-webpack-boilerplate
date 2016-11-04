@@ -46,7 +46,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "cesium": "^1.24.0",
+    "cesium": "1.27.0",
     "postcss-smart-import": "^0.4.4"
   }
 }
