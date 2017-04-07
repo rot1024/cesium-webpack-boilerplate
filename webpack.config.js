@@ -22,7 +22,7 @@ const cssLoaders = prod => [
 
 module.exports = ({ prod } = {}) => ({
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, "build"),
     port: devServerPort,
     hot: true
   },
@@ -72,7 +72,7 @@ module.exports = ({ prod } = {}) => ({
   },
   output: {
     filename: "bundle.js",
-    path: path.join(__dirname, prod ? "dist" : "dev"),
+    path: path.join(__dirname, prod ? "build" : "dev"),
     sourcePrefix: ""
   },
   plugins: [
