@@ -1,22 +1,21 @@
 # cesium-webpack-boilerplate
 
-Cesium + Babel + cssnext + webpack
+Cesium + webpack v2 + Babel + postcss (cssnext)
 
-REQUIRED: Node.js v6
+REQUIRED: Node.js >= v6
 
 ## Getting Started
 
 ```sh
 git clone https://github.com/rot1024/cesium-webpack-boilerplate.git
 cd cesium-webpack-boilerplate
-npm install
+npm install # or yarn
 ```
 
 ## Usage
 
 ```sh
 npm start # run dev server
-npm start -- -o # run dev server and open web browser
 npm run lint # eslint and stylelint
 npm run build # build
 ```
