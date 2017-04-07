@@ -8,6 +8,6 @@ module.exports = {
     cssImport({
       path: ["node_modules", "./src"]
     }),
-    cssnext({ browsers: ["> 5% in JP"] })
+    cssnext({ browsers: ["> 5%"] })
   ]
 };
