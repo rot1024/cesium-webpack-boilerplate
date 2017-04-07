@@ -17,5 +17,5 @@ npm install # or yarn
 ```sh
 npm start # run dev server
 npm run lint # eslint and stylelint
-npm run build # build
+npm run build
 ```
