@@ -58,7 +58,7 @@ module.exports = ({ prod } = {}) => ({
           use: {
             loader: "css-loader",
             options: {
-              minimize: prod
+              minimize: true
             }
           }
         }) : ["style-loader", "css-loader"],
