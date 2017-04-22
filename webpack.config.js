@@ -93,6 +93,7 @@ module.exports = ({ prod } = {}) => ({
     new CopyWebpackPlugin([
       {
         from: `node_modules/cesium/Build/Cesium${prod ? "" : "Unminified"}`,
+        to :"cesium",
         ignore: "Cesium.js"
       },
       {
