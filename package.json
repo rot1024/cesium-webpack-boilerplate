@@ -6,7 +6,7 @@
     "start": "webpack-dev-server",
     "lint": "run-p eslint stylelint",
     "eslint": "eslint .",
-    "stylelint": "stylelint .",
+    "stylelint": "stylelint \"src/**/*.css\"",
     "build": "webpack --env.prod"
   },
   "repository": {
