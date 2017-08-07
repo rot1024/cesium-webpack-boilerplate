@@ -1,7 +1,7 @@
+import Viewer from "cesium/Source/Widgets/Viewer/Viewer";
+
 import "./bootstrap";
 import "./style.css";
-
-import Viewer from "cesium/Source/Widgets/Viewer/Viewer";
 
 // eslint-disable-next-line no-unused-vars
 const viewer = new Viewer(document.getElementById("cesium"));
