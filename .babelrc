@@ -2,7 +2,7 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["> 5%"]
+        "uglify": true
       },
       "modules": false,
       "loose": true
