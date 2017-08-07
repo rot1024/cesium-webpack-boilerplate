@@ -3,6 +3,7 @@
 const path = require("path");
 
 const webpack = require("webpack");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
@@ -74,8 +75,9 @@ module.exports = ({ prod } = {}) => {
       ]
     },
     output: {
-      filename: "bundle.js",
+      filename: `bundle.${prod ? "[chunkhash]." : ""}js`,
       path: path.join(__dirname, prod ? "build" : "dev"),
+      publicPath: "/",
       sourcePrefix: ""
     },
     plugins: [
@@ -83,6 +85,7 @@ module.exports = ({ prod } = {}) => {
         "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development")
       }),
       ...prod ? [
+        new CleanWebpackPlugin("build"),
         new webpack.optimize.UglifyJsPlugin({
           ecma: 5,
           parallel: true
@@ -99,20 +102,21 @@ module.exports = ({ prod } = {}) => {
         filename: `vendor${prod ? ".[chunkhash]" : ""}.js`,
         minChunks: module => module.context && module.context.indexOf("node_modules") !== -1
       }),
-      new HtmlWebpackPlugin({
-        template: "src/index.html"
-      }),
       new CopyWebpackPlugin([
         {
           from: `node_modules/cesium/Build/Cesium${prod ? "" : "Unminified"}`,
           to: "cesium",
-          ignore: "Cesium.js"
+          ignore: ["Cesium.js"]
         },
         {
           from: "static",
-          to: "static"
+          to: "static",
+          ignore: [".gitkeep"]
         }
-      ])
+      ]),
+      new HtmlWebpackPlugin({
+        template: "src/index.html"
+      })
     ]
   };
 };
