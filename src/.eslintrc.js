@@ -4,6 +4,9 @@ module.exports = {
     commonjs: true,
     node: false
   },
+  globals: {
+    Cesium: true
+  },
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: "module",

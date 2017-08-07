@@ -3,9 +3,11 @@
 const path = require("path");
 
 const webpack = require("webpack");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
 
 module.exports = ({ prod } = {}) => {
   const devServerPort = 3000;
@@ -38,8 +40,6 @@ module.exports = ({ prod } = {}) => {
       "./src/index.js"
     ],
     module: {
-      unknownContextCritical: false,
-      unknownContextRegExp: /^.\/.*$/,
       rules: [
         {
           test: /\.js$/,
@@ -66,23 +66,20 @@ module.exports = ({ prod } = {}) => {
             }
           }) : ["style-loader", "css-loader"],
           include: /node_modules/
-        },
-        {
-          test: /\.(png|gif|jpg|jpeg)$/,
-          use: "file-loader"
         }
       ]
     },
     output: {
-      filename: "bundle.js",
+      filename: `bundle${prod ? ".[chunkhash]" : ""}.js`,
       path: path.join(__dirname, prod ? "build" : "dev"),
-      sourcePrefix: ""
+      publicPath: "/"
     },
     plugins: [
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development")
       }),
       ...prod ? [
+        new CleanWebpackPlugin("build"),
         new webpack.optimize.UglifyJsPlugin({
           ecma: 5,
           parallel: true
@@ -99,20 +96,27 @@ module.exports = ({ prod } = {}) => {
         filename: `vendor${prod ? ".[chunkhash]" : ""}.js`,
         minChunks: module => module.context && module.context.indexOf("node_modules") !== -1
       }),
-      new HtmlWebpackPlugin({
-        template: "src/index.html"
-      }),
       new CopyWebpackPlugin([
         {
           from: `node_modules/cesium/Build/Cesium${prod ? "" : "Unminified"}`,
-          to: "cesium",
-          ignore: "Cesium.js"
+          to: "cesium"
         },
         {
           from: "static",
-          to: "static"
+          to: "static",
+          ignore: [".gitkeep"]
         }
-      ])
+      ]),
+      new HtmlWebpackPlugin({
+        template: "src/index.html"
+      }),
+      new HtmlWebpackIncludeAssetsPlugin({
+        append: false,
+        assets: [
+          "cesium/Widgets/widgets.css",
+          "cesium/Cesium.js"
+        ]
+      })
     ]
   };
 };

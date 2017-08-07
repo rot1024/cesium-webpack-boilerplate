@@ -1,10 +1,9 @@
-import Viewer from "cesium/Source/Widgets/Viewer/Viewer";
-
-import "./bootstrap";
 import "./style.css";
 
+Cesium.buildModuleUrl.setBaseUrl("./cesium/");
+
 // eslint-disable-next-line no-unused-vars
-const viewer = new Viewer(document.getElementById("cesium"));
+const viewer = new Cesium.Viewer(document.getElementById("cesium"));
 
 if (module.hot) {
   module.hot.accept();
