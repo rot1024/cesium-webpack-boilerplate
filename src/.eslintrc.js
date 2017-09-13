@@ -8,7 +8,6 @@ module.exports = {
     Cesium: true
   },
   parserOptions: {
-    ecmaVersion: 2018,
     sourceType: "module",
     ecmaFeatures: {
       experimentalObjectRestSpread: true
