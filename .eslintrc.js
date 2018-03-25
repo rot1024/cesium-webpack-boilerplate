@@ -7,6 +7,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018
   },
+  settings: {
+    "import/resolver": "webpack"
+  },
   plugins: ["import", "node"],
   root: true,
   rules: {
@@ -276,7 +279,7 @@ module.exports = {
     "import/no-nodejs-modules": 0,
     "import/no-restricted-paths": 0,
     "import/no-unassigned-import": 0,
-    "import/no-unresolved": 0,
+    "import/no-unresolved": 2,
     "import/no-webpack-loader-syntax": 2,
     "import/order": [1, {
       groups: ["builtin", "external", "parent", "sibling", "index"],
@@ -288,8 +291,8 @@ module.exports = {
     "node/no-extraneous-import": 2,
     "node/no-extraneous-require": 2,
     "node/no-deprecated-api": 2,
-    "node/no-missing-import": 2,
-    "node/no-missing-require": 2,
+    "node/no-missing-import": 0,
+    "node/no-missing-require": 0,
     "node/no-unpublished-bin": 2,
     "node/no-unpublished-import": 0,
     "node/no-unpublished-require": 0,
