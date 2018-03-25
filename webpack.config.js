@@ -8,6 +8,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 
+const cesiumSource = "node_modules/cesium/Source";
+const cesiumWorkers = "../Build/Cesium/Workers";
+
 module.exports = ({ prod } = {}) => {
   const devServerPort = 3000;
   const extractCSS = new ExtractTextWebpackPlugin("style.css");
@@ -69,8 +72,8 @@ module.exports = ({ prod } = {}) => {
           include: /node_modules/
         },
         {
-          test: /\.(png|gif|jpg|jpeg)$/,
-          use: "file-loader"
+          test: /\.(png|gif|jpg|jpeg|svg|xml|json)$/,
+          use: ["url-loader"]
         }
       ]
     },
@@ -80,9 +83,21 @@ module.exports = ({ prod } = {}) => {
       publicPath: "/",
       sourcePrefix: ""
     },
+    amd: {
+      toUrlUndefined: true
+    },
+    node: {
+      fs: "empty"
+    },
+    resolve: {
+      alias: {
+        cesium: path.resolve(__dirname, cesiumSource)
+      }
+    },
     plugins: [
       new webpack.DefinePlugin({
-        "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development")
+        "process.env.NODE_ENV": JSON.stringify(prod ? "production" : "development"),
+        CESIUM_BASE_URL: JSON.stringify("")
       }),
       ...prod ? [
         new CleanWebpackPlugin("build"),
@@ -112,7 +127,10 @@ module.exports = ({ prod } = {}) => {
           from: "static",
           to: "static",
           ignore: [".gitkeep"]
-        }
+        },
+        { from: path.join(cesiumSource, cesiumWorkers), to: "Workers" },
+        { from: path.join(cesiumSource, "Assets"), to: "Assets" },
+        { from: path.join(cesiumSource, "Widgets"), to: "Widgets" }
       ]),
       new HtmlWebpackPlugin({
         template: "src/index.html"
